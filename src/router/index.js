@@ -13,7 +13,8 @@ import {
   ChooseDoctor,
   Chatting,
   UserProfile,
-  UpdateProfile
+  UpdateProfile,
+  DoctorProfile
 } from '../pages'
 import { BottomNavigator } from '../components'
 
@@ -45,6 +46,7 @@ const Router = () => {
       <Stack.Screen name="Chatting" component={Chatting} />
       <Stack.Screen name="UserProfile" component={UserProfile} />
       <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+      <Stack.Screen name="DoctorProfile" component={DoctorProfile} />
     </Stack.Navigator>
   )
 }

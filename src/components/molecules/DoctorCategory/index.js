@@ -1,15 +1,26 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { ILCatUmum } from '../../../assets'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { ILCatUmum, ILCatPsikiater, ILCatObat } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
-export default function DoctorCategory() {
+export default function DoctorCategory({ category, onPress }) {
+  const Icon = () => {
+    if (category === "dokter umum") {
+      return <ILCatUmum style={styles.illustration} />
+    } else if (category === "psikiater") {
+      return <ILCatPsikiater style={styles.illustration} />
+    } else if (category === "dokter obat") {
+      return <ILCatObat style={styles.illustration} />
+    }
+    return <ILCatUmum style={styles.illustration} />
+  }
+
   return (
-    <View style={styles.container}>
-      <ILCatUmum style={styles.illustration} />
+    <TouchableOpacity style={styles.container} onPress={onPress} >
+      <Icon />
       <Text style={styles.label}>Saya butuh</Text>
-      <Text style={styles.category}>dokter umum</Text>
-    </View>
+      <Text style={styles.category}>{category}</Text>
+    </TouchableOpacity>
   )
 }
 

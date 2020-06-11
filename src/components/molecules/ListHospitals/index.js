@@ -3,14 +3,14 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { DummyHospital1 } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
-export default function ListHospitals() {
+export default function ListHospitals({ pic, type, name, address }) {
   return (
     <View style={styles.container}>
-      <Image source={DummyHospital1} style={styles.picture} />
+      <Image source={pic} style={styles.picture} />
       <View>
-        <Text style={styles.title}>Rumah Sakit</Text>
-        <Text style={styles.title}>Citra Bunga Merdeka</Text>
-        <Text style={styles.address}>Jl. Surya Sejahtera 20</Text>
+        <Text style={styles.title}>{type}</Text>
+        <Text style={styles.title}>{name}</Text>
+        <Text style={styles.address}>{address}</Text>
       </View>
     </View>
   )
@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
+    borderBottomColor: colors.border,
+    alignItems: "center"
   },
   picture: {
     width: 80,

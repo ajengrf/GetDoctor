@@ -11,7 +11,7 @@ export default function Doctor({ navigation }) {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.wrapperSection}>
             <Gap height={30} />
-            <HomeProfile />
+            <HomeProfile onPress={() => navigation.navigate("UserProfile")} />
             <Text style={styles.welcome}>Mau konsultasi dengan siapa hari ini?</Text>
           </View>
           <View style={styles.wrapperScroll}>
@@ -22,7 +22,7 @@ export default function Doctor({ navigation }) {
                   <DoctorCategory
                     key={item.id}
                     category={item.category}
-                    onPress={() => navigation.navigate("ChooseDoctor") }
+                    onPress={() => navigation.navigate("ChooseDoctor")}
                   />
                 ))}
                 <Gap width={22} />

@@ -11,7 +11,8 @@ import {
   Messages,
   Hospitals,
   ChooseDoctor,
-  Chatting
+  Chatting,
+  UserProfile
 } from '../pages'
 import { BottomNavigator } from '../components'
 
@@ -41,6 +42,7 @@ const Router = () => {
       <Stack.Screen name="MainApp" component={MainApp} />
       <Stack.Screen name="ChooseDoctor" component={ChooseDoctor} />
       <Stack.Screen name="Chatting" component={Chatting} />
+      <Stack.Screen name="UserProfile" component={UserProfile} />
     </Stack.Navigator>
   )
 }

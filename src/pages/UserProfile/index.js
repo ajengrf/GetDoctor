@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Header, Profile, List, Gap } from '../../components'
 import { colors } from '../../utils'
 
-const UserProfile = () => {
+const UserProfile = ({ navigation }) => {
   return (
     <View style={styles.page}>
       <Header title="Profile" />
@@ -14,7 +14,9 @@ const UserProfile = () => {
         name="Edit Profile"
         desc="Last Updated Yesterday"
         type="next"
-        icon="edit-profile" />
+        icon="edit-profile"
+        onPress={() => navigation.navigate("UpdateProfile")}
+      />
       <List
         name="Language"
         desc="Last Updated Yesterday"

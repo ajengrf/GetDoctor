@@ -9,6 +9,7 @@ import Hospitals from './Hospitals'
 import ChooseDoctor from './ChooseDoctor'
 import Chatting from './Chatting'
 import UserProfile from './UserProfile'
+import UpdateProfile from './UpdateProfile'
 
 export {
   Splash,
@@ -21,5 +22,6 @@ export {
   Hospitals,
   ChooseDoctor,
   Chatting,
-  UserProfile
+  UserProfile,
+  UpdateProfile,
 }

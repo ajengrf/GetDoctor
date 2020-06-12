@@ -51,7 +51,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginLeft: 16
+    marginLeft: 16,
+    justifyContent: "center"
   },
   name: {
     fontSize: 16,

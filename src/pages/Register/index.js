@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
 import { Header, Input, Button, Gap, Loading } from '../../components'
-import { colors, useForm } from '../../utils'
+import { colors, useForm, storeData, getData } from '../../utils'
 import { Firebase } from '../../config'
 import { showMessage, hideMessage } from "react-native-flash-message";
 
@@ -17,6 +17,12 @@ export default function Register({ navigation }) {
 
   const onContinue = () => {
     console.log(form)
+    // const userData = {
+    //   fullName: form.fullName,
+    //   profession: form.profession,
+    //   email: form.email
+    // }
+    // navigation.navigate("UploadPhoto", userData)
 
     setLoading(true)
     Firebase
@@ -29,13 +35,17 @@ export default function Register({ navigation }) {
         const userData = {
           fullName: form.fullName,
           profession: form.profession,
-          email: form.email
+          email: form.email,
+          uid: success.user.uid
         }
 
         Firebase
           .database()
           .ref("users/" + success.user.uid + "/")
           .set(userData)
+
+        storeData("user", userData)
+        navigation.navigate("UploadPhoto", userData)
 
         console.log({ success })
         console.log({ data: success.user })
@@ -53,7 +63,6 @@ export default function Register({ navigation }) {
         })
       });
 
-    // navigation.navigate("UploadPhoto")
   }
 
   return (

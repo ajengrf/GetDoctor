@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { HomeProfile, DoctorCategory, RatedDoctor, NewsItem, Gap } from '../../components'
-import { fonts, colors } from '../../utils'
+import { fonts, colors, getData } from '../../utils'
 import { JSONCategoryDoctor, DummyDoctor2, DummyDoctor1, DummyDoctor3 } from '../../assets'
 
 export default function Doctor({ navigation }) {
+
   return (
     <View style={styles.page}>
       <View style={styles.content}>

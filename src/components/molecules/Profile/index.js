@@ -1,17 +1,22 @@
-import React from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
-import { DummyUser, IconRemovePhoto } from '../../../assets'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { DummyUser, IconRemovePhoto, ILNullPhoto } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
-export default function Profile({ name, desc, isRemove }) {
+export default function Profile({ name, desc, isRemove, photo, onPress }) {
+
   return (
     <View style={styles.container}>
-      <View style={styles.borderProfile}>
-        <Image source={DummyUser} style={styles.avatar} />
-        {isRemove &&
+      {isRemove ?
+        <TouchableOpacity style={styles.borderProfile} onPress={onPress}>
+          <Image source={photo} style={styles.avatar} />
           <IconRemovePhoto style={styles.removePhoto} />
-        }
-      </View>
+        </TouchableOpacity>
+        :
+        <View style={styles.borderProfile}>
+          <Image source={photo} style={styles.avatar} />
+        </View>
+      }
       {name && (
         <View>
           <Text style={styles.name}>{name}</Text>
@@ -51,13 +56,16 @@ const styles = StyleSheet.create({
     fontFamily: fonts.primary[600],
     color: colors.text.primary,
     marginTop: 16,
-    textAlign: "center"
+    textAlign: "center",
+    textTransform: "capitalize"
   },
   profession: {
     fontSize: 16,
     fontFamily: fonts.primary[600],
     color: colors.text.secondary,
     marginTop: 2,
-    textAlign: "center"
+    textAlign: "center",
+    textTransform: "capitalize"
+
   }
 })

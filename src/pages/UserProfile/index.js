@@ -1,14 +1,36 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Header, Profile, List, Gap } from '../../components'
-import { colors } from '../../utils'
+import { colors, getData } from '../../utils'
+import { ILNullPhoto } from '../../assets'
 
 const UserProfile = ({ navigation }) => {
+  const [profile, setProfile] = useState({
+    fullName: "",
+    profession: "",
+    photo: ILNullPhoto
+  })
+
+  useEffect(() => {
+    getData("user")
+      .then(user => {
+        user.photo = { uri: user.photo }
+        setProfile(user)
+      })
+      
+  }, [])
+
   return (
     <View style={styles.page}>
       <Header title="Profile" onPress={() => navigation.goBack()} />
       <Gap height={10} />
-      <Profile name="Shayna Melinda" desc="Product Designer" />
+      {profile.fullName.length > 0 && (
+        <Profile
+          name={profile.fullName}
+          desc={profile.profession}
+          photo={profile.photo}
+        />
+      )}
       <Gap height={14} />
       <List
         name="Edit Profile"

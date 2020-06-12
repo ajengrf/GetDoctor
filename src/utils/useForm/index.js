@@ -4,8 +4,11 @@ export const useForm = (initialValue) => {
   const [values, setValues] = useState(initialValue)
   return [
     values,
-    (type, formValue) => {
-      return setValues({ ...values, [type]: formValue })
+    (formType, formValue) => {
+      if (formType === "reset") {
+        return setValues(initialValue)
+      }
+      return setValues({ ...values, [formType]: formValue })
     }
   ]
 }

@@ -1,24 +1,41 @@
-import React from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
-import { Header, Input, Button, Gap, Link } from '../../components'
-import { ILNullPhoto, IconAddPhoto } from '../../assets'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { Header, Button, Gap, Link } from '../../components'
+import { ILNullPhoto, IconAddPhoto, IconRemovePhoto } from '../../assets'
 import { colors, fonts } from '../../utils'
+import ImagePicker from 'react-native-image-picker'
 
 export default function UploadPhoto({ navigation }) {
+  const [hasPhoto, setHasPhoto] = useState(false)
+  const [photo, setPhoto] = useState(ILNullPhoto)
+
+  const getImage = () => {
+    ImagePicker.launchImageLibrary({}, (response) => {
+      const source = { uri: response.uri }
+      setPhoto(source)
+      setHasPhoto(true)
+      console.log({ response })
+    });
+  }
   return (
     <View style={styles.page}>
       <Header title="Upload Photo" onPress={() => navigation.goBack()} />
       <View style={styles.content}>
         <View style={styles.profile}>
-          <View style={styles.avatarWrapper}>
-            <Image source={ILNullPhoto} style={styles.avatar} />
-            <IconAddPhoto style={styles.addPhoto} />
-          </View>
+          <TouchableOpacity style={styles.avatarWrapper} onPress={getImage}>
+            <Image source={photo} style={styles.avatar} />
+            {hasPhoto ?
+              <IconRemovePhoto style={styles.addPhoto} />
+              :
+              <IconAddPhoto style={styles.addPhoto} />
+            }
+          </TouchableOpacity>
           <Text style={styles.name}>Shayna Melinda</Text>
           <Text style={styles.profession}>Product Designer</Text>
         </View>
         <View>
           <Button
+            disable={!hasPhoto}
             onPress={() => navigation.replace("MainApp")}
             title="Upload and Continue"
           />
@@ -62,7 +79,8 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 110,
-    height: 110
+    height: 110,
+    borderRadius: 110 / 2
   },
   addPhoto: {
     position: "absolute",

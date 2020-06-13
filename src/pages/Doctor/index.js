@@ -1,10 +1,27 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { HomeProfile, DoctorCategory, RatedDoctor, NewsItem, Gap } from '../../components'
-import { fonts, colors, getData } from '../../utils'
+import { fonts, colors, getData, showError } from '../../utils'
 import { JSONCategoryDoctor, DummyDoctor2, DummyDoctor1, DummyDoctor3 } from '../../assets'
+import { Firebase } from '../../config'
 
 export default function Doctor({ navigation }) {
+  const [news, setNews] = useState([])
+
+  useEffect(() => {
+    Firebase.database()
+      .ref("news/")
+      .once("value")
+      .then(res => {
+        if (res.val()) {
+          setNews(res.val())
+        }
+      })
+      .catch(err => {
+        showError(err.message)
+      })
+
+  }, [])
 
   return (
     <View style={styles.page}>
@@ -48,9 +65,14 @@ export default function Doctor({ navigation }) {
               avatar={DummyDoctor3}
               onPress={() => navigation.navigate("DoctorProfile")} />
             <Text style={styles.sectionLabel}>Good News</Text>
-            <NewsItem />
-            <NewsItem />
-            <NewsItem />
+            {news.map(item => (
+              < NewsItem
+                key={item.id}
+                title={item.title}
+                date={item.date}
+                image={item.image}
+              />
+            ))}
             <Gap height={30} />
           </View>
         </ScrollView>

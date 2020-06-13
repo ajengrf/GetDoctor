@@ -60,7 +60,6 @@ export default function Doctor({ navigation }) {
               data: oldData[key]
             })
           })
-          console.log(data, '<< niloh')
           setDoctors(data)
         }
       })
@@ -86,7 +85,7 @@ export default function Doctor({ navigation }) {
                   <DoctorCategory
                     key={item.id}
                     category={item.category}
-                    onPress={() => navigation.navigate("ChooseDoctor")}
+                    onPress={() => navigation.navigate("ChooseDoctor", item)}
                   />
                 ))}
                 <Gap width={22} />
@@ -101,7 +100,7 @@ export default function Doctor({ navigation }) {
                 name={doctor.data.fullName}
                 desc={doctor.data.profession}
                 avatar={{ uri: doctor.data.photo }}
-                onPress={() => navigation.navigate("DoctorProfile")} />
+                onPress={() => navigation.navigate("DoctorProfile", doctor.data)} />
             ))}
             <Text style={styles.sectionLabel}>Good News</Text>
             {news.map(item => (

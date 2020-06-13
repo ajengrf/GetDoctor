@@ -1,24 +1,55 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { Header, List } from '../../components'
-import { DummyDoctor1 } from '../../assets'
 import { colors } from '../../utils'
+import { Firebase } from '../../config'
 
-const ChooseDoctor = ({ navigation }) => {
+const ChooseDoctor = ({ navigation, route }) => {
+  const itemCategory = route.params
+  const [listDoctor, setListDoctor] = useState([])
+
+  useEffect(() => {
+    doctorByCategory()
+  }, [])
+
+  const doctorByCategory = () => {
+    Firebase.database()
+      .ref("doctors/")
+      .orderByChild("category")
+      .equalTo(itemCategory.category)
+      .once("value")
+      .then(res => {
+        if (res.val()) {
+          const oldData = res.val()
+          const data = []
+          Object.keys(oldData).map(key => {
+            data.push({
+              id: key,
+              data: oldData[key]
+            })
+          })
+          setListDoctor(data)
+        }
+      })
+  }
+
   return (
     <View style={styles.page}>
       <Header
-        title="Pilih Dokter Anak"
+        title={`Pilih ${itemCategory.category}`}
         type="dark"
         onPress={() => navigation.goBack()}
       />
-      <List
-        profile={DummyDoctor1}
-        name="Alexander Jannie"
-        desc="Wanita"
-        type="next"
-        onPress={() => navigation.navigate("Chatting")}
-      />
+      {listDoctor.map(doctor => (
+        <List
+          key={doctor.id}
+          profile={{ uri: doctor.data.photo }}
+          name={doctor.data.fullName}
+          desc={doctor.data.gender}
+          type="next"
+          onPress={() => navigation.navigate("DoctorProfile", doctor.data)}
+        />
+      ))}
     </View>
   )
 }

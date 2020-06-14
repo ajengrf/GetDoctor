@@ -28,7 +28,7 @@ const DoctorProfile = ({ navigation, route }) => {
         value={dataDoctor.str_number}
       />
       <View style={styles.action}>
-        <Button title="Start Consultation" onPress={() => navigation.navigate("Chatting")} />
+        <Button title="Start Consultation" onPress={() => navigation.navigate("Chatting", dataDoctor)} />
       </View>
     </View>
   )

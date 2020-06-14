@@ -4,15 +4,15 @@ import { colors, fonts } from '../../../utils'
 import { Button } from '../../atoms'
 import { DummyDoctor1 } from '../../../assets'
 
-export default function DarkProfile({ onPress }) {
+export default function DarkProfile({ onPress, title, desc, photo }) {
   return (
     <View style={styles.container}>
       <Button type="icon-only" icon="back-light" onPress={onPress} />
       <View style={styles.content}>
-        <Text style={styles.name}>Nama Dokter</Text>
-        <Text style={styles.desc}>Dokter Anak</Text>
+        <Text style={styles.name}>{title}</Text>
+        <Text style={styles.desc}>{desc}</Text>
       </View>
-      <Image source={DummyDoctor1} style={styles.avatar} />
+      <Image source={photo} style={styles.avatar} />
     </View>
   )
 }
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 20,
     fontFamily: fonts.primary[600],
+    textTransform: "capitalize",
     textAlign: "center"
   },
   desc: {
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.primary[400],
     marginTop: 6,
     textAlign: "center",
-    color: colors.text.subTitle
+    color: colors.text.subTitle,
+    textTransform: "capitalize"
   },
   avatar: {
     width: 46,

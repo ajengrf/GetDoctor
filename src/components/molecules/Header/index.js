@@ -4,10 +4,15 @@ import { Gap, Button } from '../../atoms'
 import { colors, fonts } from '../../../utils'
 import DarkProfile from './DarkProfile'
 
-export default function Header({ title, onPress, type }) {
+export default function Header({ title, onPress, photo, desc, type }) {
   if (type === "dark-profile") {
     return (
-      <DarkProfile onPress={onPress} />
+      <DarkProfile
+        onPress={onPress}
+        title={title}
+        desc={desc}
+        photo={photo}
+      />
     )
   }
 

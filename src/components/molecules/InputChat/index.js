@@ -8,7 +8,7 @@ export default function InputChat({ value, onChangeText, onButtonPress }) {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Tulis pesan untuk Nairobi"
+        placeholder="Tulis pesan..."
         value={value}
         onChangeText={onChangeText}
       />

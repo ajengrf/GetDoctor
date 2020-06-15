@@ -6,46 +6,35 @@ import { DummyDoctor4, DummyDoctor5, DummyDoctor6 } from '../../assets'
 import { Firebase } from '../../config'
 
 export default function Messages({ navigation }) {
-  const [doctors, setDoctors] = useState([
-    {
-      id: 1,
-      profile: DummyDoctor4,
-      name: "Alexander Jannie",
-      desc: "Baik ibu, terima kasih banyak atas wakt..."
-    },
-    {
-      id: 2,
-      profile: DummyDoctor5,
-      name: "Nairobi Putri Hayza",
-      desc: "Oh tentu saja tidak karena jeruk it..."
-    },
-    {
-      id: 3,
-      profile: DummyDoctor6,
-      name: "John McParker Steve",
-      desc: "Oke menurut pak dokter bagaimana unt..."
-    },
-  ])
   const [user, setUser] = useState({})
   const [historyChat, setHistoryChat] = useState([])
 
   useEffect(() => {
     getDataUserFromLocal()
+    const rootDB = Firebase.database().ref()
     const urlHistory = `messages/${user.uid}`
+    const messagesDB = rootDB.child(urlHistory)
 
-    Firebase.database()
-      .ref(urlHistory)
-      .on("value", (snapshot) => {
+    messagesDB
+      .on("value", async snapshot => {
         console.log(snapshot.val(), '>>>>>>>')
         if (snapshot.val()) {
           const oldData = snapshot.val()
           const data = []
-          Object.keys(oldData).map(key => {
+          const promises = await Object.keys(oldData).map(async key => {
+            const urlUidDoctor = `doctors/${oldData[key].uidPartner}`
+            const detailDoctor = await rootDB.child(urlUidDoctor)
+              .once("value")
+
             data.push({
               id: key,
-              ...oldData[key]
+              ...oldData[key],
+              detailDoctor: detailDoctor.val()
             })
           })
+
+          await Promise.all(promises)
+
           setHistoryChat(data)
           console.log(data, '<<<<<Data')
         }
@@ -67,10 +56,10 @@ export default function Messages({ navigation }) {
         {historyChat.map(chat => (
           <List
             key={chat.id}
-            // profile={chat.profile}
-            name={chat.uidPartner}
+            profile={{ uri: chat.detailDoctor.photo }}
+            name={chat.detailDoctor.fullName}
             desc={chat.lastChatContent}
-            onPress={() => navigation.navigate("Chatting")}
+            onPress={() => navigation.navigate("Chatting", chat.detailDoctor)}
           />
         ))}
       </View>

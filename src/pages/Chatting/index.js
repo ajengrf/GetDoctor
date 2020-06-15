@@ -1,47 +1,82 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { Header, ChatItem, InputChat } from '../../components'
-import { fonts, colors, getData, showError } from '../../utils'
+import { fonts, colors, getData, showError, getChatTime, setDateChat } from '../../utils'
 import { Firebase } from '../../config'
 
 const Chatting = ({ navigation, route }) => {
   const dataDoctor = route.params
   const [chatContent, setChatContent] = useState("")
   const [user, setUser] = useState({})
+  const [chatData, setChatData] = useState([])
 
   useEffect(() => {
+    getDataUserFromLocal()
+    getDataChatting()
+  }, [dataDoctor.uid, user.uid])
+
+  const getDataUserFromLocal = () => {
     getData("user")
       .then(res => {
         setUser(res)
       })
-  }, [])
+  }
+
+  const getDataChatting = () => {
+    const chatID = `${user.uid}_${dataDoctor.uid}`
+    const urlFirebase = `chatting/${chatID}/allChat/`
+
+    Firebase.database()
+      .ref(urlFirebase)
+      .on("value", (snapshot) => {
+        if (snapshot.val()) {
+          const dataSnapshot = snapshot.val()
+          const allDataChat = []
+
+          Object.keys(dataSnapshot).map(key => {
+            const dataChat = dataSnapshot[key]
+            const newDataChat = []
+
+            Object.keys(dataChat).map(itemChat => {
+              newDataChat.push({
+                id: itemChat,
+                data: dataChat[itemChat]
+              })
+            })
+            allDataChat.push({
+              id: key,
+              data: newDataChat
+            })
+          })
+          setChatData(allDataChat)
+        }
+      })
+
+  }
 
   const chatSend = () => {
     const today = new Date()
-    const hour = today.getHours()
-    const minutes = today.getMinutes()
-    const year = today.getFullYear()
-    const month = today.getMonth() + 1
-    const date = today.getDate()
 
     const data = {
       sendBy: user.uid,
-      chatDate: new Date().getTime(),
-      chatTime: `${hour}:${minutes} ${hour > 12 ? "PM" : "AM"}`,
+      chatDate: today.getTime(),
+      chatTime: getChatTime(today),
       chatContent: chatContent
     }
+    const chatID = `${user.uid}_${dataDoctor.uid}`
+    const urlFirebase = `chatting/${chatID}/allChat/${setDateChat(today)}`
 
+    // send chat to firebase
     Firebase.database()
-      .ref(`chatting/${user.uid}_${dataDoctor.uid}/allChat/${year}-${month}-${date}`)
+      .ref(urlFirebase)
       .push(data)
       .then(res => {
-        console.log({res})
+        setChatContent("")
       })
       .catch(err => {
         showError(err.message)
       })
 
-    setChatContent("")
   }
 
 
@@ -56,11 +91,23 @@ const Chatting = ({ navigation, route }) => {
       />
       <View style={styles.content}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.chatDate}>Senin, 21 Maret 2020</Text>
-          <ChatItem isMe />
-          <ChatItem />
-          <ChatItem isMe />
-          <ChatItem isMe />
+          {chatData.map(chat => (
+            <View key={chat.id}>
+              <Text style={styles.chatDate}>{chat.id}</Text>
+              {chat.data.map(item => {
+                const isMe = item.data.sendBy === user.uid
+                return (
+                  <ChatItem
+                    key={item.id}
+                    isMe={isMe}
+                    text={item.data.chatContent}
+                    date={item.data.chatTime}
+                    photo={isMe ? null : { uri: dataDoctor.photo }}
+                  />
+                )
+              })}
+            </View>
+          ))}
         </ScrollView>
       </View>
       <InputChat

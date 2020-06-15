@@ -17,7 +17,6 @@ export default function Messages({ navigation }) {
 
     messagesDB
       .on("value", async snapshot => {
-        console.log(snapshot.val(), '>>>>>>>')
         if (snapshot.val()) {
           const oldData = snapshot.val()
           const data = []
@@ -36,7 +35,6 @@ export default function Messages({ navigation }) {
           await Promise.all(promises)
 
           setHistoryChat(data)
-          console.log(data, '<<<<<Data')
         }
       })
 
